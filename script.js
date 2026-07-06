@@ -244,4 +244,69 @@ document.addEventListener('DOMContentLoaded', () => {
     heartBig.style.cursor = 'pointer';
   }
 
+  // ============================================================
+  // 8. PHOTO SLIDER
+  // ============================================================
+  const track    = document.getElementById('sliderTrack');
+  const slides   = track ? Array.from(track.querySelectorAll('.slide')) : [];
+  const dotsWrap = document.getElementById('sliderDots');
+  const btnPrev  = document.getElementById('sliderPrev');
+  const btnNext  = document.getElementById('sliderNext');
+
+  if (slides.length > 0) {
+    let current   = 0;
+    let autoTimer = null;
+
+    // Crear dots indicadores
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Foto ' + (i + 1));
+      dot.addEventListener('click', () => { stopAuto(); goTo(i); startAuto(); });
+      dotsWrap.appendChild(dot);
+    });
+
+    function goTo(idx) {
+      slides[current].classList.remove('active');
+      dotsWrap.children[current].classList.remove('active');
+      current = (idx + slides.length) % slides.length;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      slides[current].classList.add('active');
+      dotsWrap.children[current].classList.add('active');
+    }
+
+    function startAuto() { autoTimer = setInterval(() => goTo(current + 1), 4500); }
+    function stopAuto()  { clearInterval(autoTimer); }
+
+    // Iniciar primera slide
+    slides[0].classList.add('active');
+
+    // Botones prev / next
+    btnPrev.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
+    btnNext.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
+
+    // Swipe táctil
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) { stopAuto(); goTo(diff > 0 ? current + 1 : current - 1); startAuto(); }
+    });
+
+    // Pausa en hover
+    const wrapper = track.closest('.slider-wrapper');
+    if (wrapper) {
+      wrapper.addEventListener('mouseenter', stopAuto);
+      wrapper.addEventListener('mouseleave', startAuto);
+    }
+
+    // Teclas ← →
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft')  { stopAuto(); goTo(current - 1); startAuto(); }
+      if (e.key === 'ArrowRight') { stopAuto(); goTo(current + 1); startAuto(); }
+    });
+
+    startAuto();
+  }
+
 });
