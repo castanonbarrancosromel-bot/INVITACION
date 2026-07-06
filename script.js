@@ -1,120 +1,82 @@
 /* ============================================================
    WEDDING INVITATION - JavaScript
    Ernesto & Olivia · 08/08/2026
+   Dark Luxury Redesign
 ============================================================ */
 
-/* ---- CONFIGURA TU NÚMERO DE WHATSAPP AQUÍ ---- */
-/* Pon el número sin el signo + ni espacios, ej: 59170012345 */
-const WA_NUMBER = '591TUNUMERO';
+const WA_NUMBER = '591TUNUMERO'; // ← Cambia por el número real
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Actualizar links de WhatsApp con el número configurado
-  document.querySelectorAll('.rsvp-wa-btn').forEach(btn => {
-    const href = btn.getAttribute('href');
-    if (href) btn.setAttribute('href', href.replace('591TUNUMERO', WA_NUMBER));
+  // Actualizar links WhatsApp
+  document.querySelectorAll('.rsvp-wa').forEach(btn => {
+    const h = btn.getAttribute('href');
+    if (h) btn.setAttribute('href', h.replace('591TUNUMERO', WA_NUMBER));
   });
 
   // ============================================================
-  // 1. COUNTDOWN TIMER - Sábado 8 de agosto 2026, 12:00 PM
+  // 1. COUNTDOWN
   // ============================================================
-  const weddingDate = new Date('2026-08-08T12:00:00-04:00'); // Bolivia UTC-4
+  const weddingDate = new Date('2026-08-08T12:00:00-04:00');
 
   function updateCountdown() {
-    const now  = new Date();
-    const diff = weddingDate - now;
-
+    const diff = weddingDate - new Date();
     if (diff <= 0) {
-      document.getElementById('days').textContent    = '¡Es';
-      document.getElementById('hours').textContent   = 'hoy';
-      document.getElementById('minutes').textContent = 'el';
-      document.getElementById('seconds').textContent = 'día!';
+      ['days','hours','minutes','seconds'].forEach((id, i) => {
+        document.getElementById(id).textContent = ['¡Es','hoy','el','día!'][i];
+      });
       return;
     }
-
-    const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    document.getElementById('days').textContent    = String(days).padStart(2, '0');
-    document.getElementById('hours').textContent   = String(hours).padStart(2, '0');
-    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    document.getElementById('days').textContent    = String(Math.floor(diff / 86400000)).padStart(2,'0');
+    document.getElementById('hours').textContent   = String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0');
+    document.getElementById('minutes').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
+    document.getElementById('seconds').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
   }
-
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
   // ============================================================
-  // 2. FLOATING PETALS
+  // 2. FLOATING PARTICLES
   // ============================================================
-  const petalsContainer = document.getElementById('petals');
-  const petalEmojis = ['🌸', '🌷', '✿', '🌺', '❀', '🌼', '🏵'];
+  const pc   = document.getElementById('particles');
+  const emojis = ['✦', '✧', '·', '✦', '✧', '🌸', '✿', '·'];
 
-  function createPetal() {
-    const petal = document.createElement('span');
-    petal.classList.add('petal');
-    petal.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
-    petal.style.left              = Math.random() * 100 + 'vw';
-    petal.style.fontSize          = (0.8 + Math.random() * 1.2) + 'rem';
-    petal.style.animationDuration = (6 + Math.random() * 8) + 's';
-    petal.style.animationDelay    = (Math.random() * 4) + 's';
-    petal.style.opacity           = (0.4 + Math.random() * 0.5).toString();
-    petalsContainer.appendChild(petal);
-    setTimeout(() => petal.remove(), 14000);
+  function createParticle() {
+    const p = document.createElement('span');
+    p.className = 'particle';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left             = Math.random() * 100 + 'vw';
+    p.style.fontSize         = (0.5 + Math.random() * 0.9) + 'rem';
+    p.style.animationDuration= (8 + Math.random() * 10) + 's';
+    p.style.animationDelay   = (Math.random() * 5) + 's';
+    p.style.opacity          = (0.2 + Math.random() * 0.4).toString();
+    p.style.color            = Math.random() > 0.5 ? '#c9a84c' : 'rgba(255,255,255,0.4)';
+    pc.appendChild(p);
+    setTimeout(() => p.remove(), 18000);
   }
-
-  for (let i = 0; i < 12; i++) { setTimeout(createPetal, i * 400); }
-  setInterval(createPetal, 1800);
+  for (let i = 0; i < 10; i++) setTimeout(createParticle, i * 500);
+  setInterval(createParticle, 2200);
 
   // ============================================================
   // 3. SCROLL REVEAL
   // ============================================================
-  const revealEls = document.querySelectorAll('.reveal');
-
-  const revealObserver = new IntersectionObserver((entries) => {
+  const ro = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
         const siblings = entry.target.parentElement.querySelectorAll('.reveal');
-        siblings.forEach((el, i) => { el.style.transitionDelay = (i * 0.15) + 's'; });
+        siblings.forEach((el, i) => { el.style.transitionDelay = (i * 0.14) + 's'; });
+        entry.target.classList.add('visible');
       }
     });
-  }, { threshold: 0.15 });
-
-  revealEls.forEach(el => revealObserver.observe(el));
-
-  const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity   = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.08 });
-
-  document.querySelectorAll(
-    '.family-card, .padrino-card, .dress-item, .song-card, .closing-monogram'
-  ).forEach(el => {
-    el.style.opacity    = '0';
-    el.style.transform  = 'translateY(30px)';
-    el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
-    sectionObserver.observe(el);
-  });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 
   // ============================================================
-  // 4. WEB AUDIO - Romantic Music Box Synthesizer
-  //    (Funciona sin internet, sin archivos de audio externos)
+  // 4. WEB AUDIO - Music Box Synthesizer
   // ============================================================
-  let audioCtx     = null;
-  let musicPlaying = false;
-  let seqTimer     = null;
-  let seqIndex     = 0;
-  let masterGain   = null;
-  let delayNode    = null;
+  let audioCtx = null, playing = false, seqTimer = null, seqIdx = 0;
+  let masterGain = null, delayNode = null;
 
-  // Melodía romántica (Te Amaré / balada en Do Mayor y La menor)
   const melody = [
     [261.63,1],[329.63,1],[392.00,1],[523.25,2],[392.00,1],[329.63,1],
     [246.94,1],[293.66,1],[392.00,1],[493.88,2],[392.00,1],[293.66,1],
@@ -129,184 +91,157 @@ document.addEventListener('DOMContentLoaded', () => {
   function initAudio() {
     if (audioCtx) return;
     const AC = window.AudioContext || window.webkitAudioContext;
-    audioCtx   = new AC();
-
+    audioCtx  = new AC();
     masterGain = audioCtx.createGain();
     masterGain.gain.value = 0.14;
     masterGain.connect(audioCtx.destination);
-
-    // Eco suave para efecto de sala
     delayNode = audioCtx.createDelay(1.0);
     delayNode.delayTime.value = 0.36;
-    const fbGain = audioCtx.createGain();
-    fbGain.gain.value = 0.26;
-    delayNode.connect(fbGain);
-    fbGain.connect(delayNode);
-    delayNode.connect(masterGain);
+    const fb = audioCtx.createGain(); fb.gain.value = 0.26;
+    delayNode.connect(fb); fb.connect(delayNode); delayNode.connect(masterGain);
   }
 
   function playNote(freq, dur) {
     if (!audioCtx) return;
-    const f = freq * 2; // Octava arriba = tono de caja de música
-
-    // Oscilador principal (cálido triangular)
+    const f   = freq * 2;
     const osc1 = audioCtx.createOscillator();
-    osc1.type = 'triangle';
-    osc1.frequency.value = f;
-
-    // Sobretono brillante
+    osc1.type = 'triangle'; osc1.frequency.value = f;
     const osc2 = audioCtx.createOscillator();
-    osc2.type = 'sine';
-    osc2.frequency.value = f * 2;
-    osc2.detune.value = 7;
-
+    osc2.type = 'sine'; osc2.frequency.value = f * 2; osc2.detune.value = 7;
     const g1 = audioCtx.createGain();
     g1.gain.setValueAtTime(0, audioCtx.currentTime);
     g1.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 0.018);
     g1.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur * 1.8);
-
     const g2 = audioCtx.createGain();
     g2.gain.setValueAtTime(0, audioCtx.currentTime);
     g2.gain.linearRampToValueAtTime(0.14, audioCtx.currentTime + 0.012);
     g2.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur * 0.85);
-
     osc1.connect(g1); g1.connect(masterGain); g1.connect(delayNode);
     osc2.connect(g2); g2.connect(masterGain); g2.connect(delayNode);
-
     osc1.start(); osc1.stop(audioCtx.currentTime + dur * 2.5);
     osc2.start(); osc2.stop(audioCtx.currentTime + dur * 2.5);
   }
 
   function playStep() {
-    const [freq, mult] = melody[seqIndex];
-    const BASE = 0.31;
-    playNote(freq, BASE * mult);
-    seqIndex = (seqIndex + 1) % melody.length;
-    seqTimer = setTimeout(playStep, BASE * 1000);
+    const [freq, mult] = melody[seqIdx];
+    const B = 0.31;
+    playNote(freq, B * mult);
+    seqIdx = (seqIdx + 1) % melody.length;
+    seqTimer = setTimeout(playStep, B * 1000);
   }
 
   function toggleMusic() {
     initAudio();
     if (audioCtx.state === 'suspended') audioCtx.resume();
-
-    const musicBtn = document.getElementById('musicBtn');
-    musicPlaying   = !musicPlaying;
-
-    if (musicPlaying) {
-      seqIndex = 0;
-      playStep();
-      musicBtn.classList.add('playing');
-      musicBtn.textContent = '⏸';
-      musicBtn.title = 'Pausar música';
+    const btn = document.getElementById('musicBtn');
+    playing = !playing;
+    if (playing) {
+      seqIdx = 0; playStep();
+      btn.classList.add('playing'); btn.textContent = '⏸'; btn.title = 'Pausar';
     } else {
       clearTimeout(seqTimer);
-      musicBtn.classList.remove('playing');
-      musicBtn.textContent = '♪';
-      musicBtn.title = 'Reproducir música';
+      btn.classList.remove('playing'); btn.textContent = '♪'; btn.title = 'Reproducir música';
     }
   }
-
   document.getElementById('musicBtn').addEventListener('click', toggleMusic);
 
   // ============================================================
   // 5. SMOOTH SCROLL
   // ============================================================
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
       e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const t = document.querySelector(this.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 
   // ============================================================
-  // 6. PARALLAX HERO
+  // 6. HERO PARALLAX
   // ============================================================
   const hero = document.querySelector('.hero');
   window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    if (hero && scrolled < window.innerHeight) {
-      hero.style.backgroundPositionY = (scrolled * 0.4) + 'px';
+    if (hero && window.scrollY < window.innerHeight) {
+      const img = hero.querySelector('.hero-bg-img');
+      if (img) img.style.transform = `scale(1.08) translateY(${window.scrollY * 0.18}px)`;
     }
   }, { passive: true });
 
   // ============================================================
-  // 7. HEART CLICK EASTER EGG
+  // 7. HEART EASTER EGG
   // ============================================================
-  const heartBig = document.querySelector('.heart-big');
-  if (heartBig) {
-    heartBig.addEventListener('click', () => {
-      heartBig.style.transform = 'scale(1.8)';
-      heartBig.style.color     = '#e8386d';
-      setTimeout(() => { heartBig.style.transform = ''; heartBig.style.color = ''; }, 400);
-      for (let i = 0; i < 8; i++) { setTimeout(createPetal, i * 100); }
+  const heart = document.getElementById('heartBig');
+  if (heart) {
+    heart.addEventListener('click', () => {
+      heart.style.transform = 'scale(2)';
+      heart.style.color = '#ff4d6d';
+      setTimeout(() => { heart.style.transform = ''; heart.style.color = ''; }, 400);
+      for (let i = 0; i < 10; i++) setTimeout(createParticle, i * 80);
     });
-    heartBig.style.cursor = 'pointer';
+    heart.style.cursor = 'pointer';
   }
 
   // ============================================================
-  // 8. PHOTO SLIDER
+  // 8. PHOTO SLIDER — 15 fotos
   // ============================================================
   const track    = document.getElementById('sliderTrack');
   const slides   = track ? Array.from(track.querySelectorAll('.slide')) : [];
   const dotsWrap = document.getElementById('sliderDots');
+  const counter  = document.getElementById('sliderCounter');
   const btnPrev  = document.getElementById('sliderPrev');
   const btnNext  = document.getElementById('sliderNext');
 
   if (slides.length > 0) {
-    let current   = 0;
-    let autoTimer = null;
+    let cur = 0, autoTimer = null;
+    const total = slides.length;
 
-    // Crear dots indicadores
     slides.forEach((_, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'Foto ' + (i + 1));
-      dot.addEventListener('click', () => { stopAuto(); goTo(i); startAuto(); });
-      dotsWrap.appendChild(dot);
+      const d = document.createElement('button');
+      d.className = 'sl-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Foto ' + (i + 1));
+      d.addEventListener('click', () => { stop(); goTo(i); start(); });
+      dotsWrap.appendChild(d);
     });
 
     function goTo(idx) {
-      slides[current].classList.remove('active');
-      dotsWrap.children[current].classList.remove('active');
-      current = (idx + slides.length) % slides.length;
-      track.style.transform = `translateX(-${current * 100}%)`;
-      slides[current].classList.add('active');
-      dotsWrap.children[current].classList.add('active');
+      slides[cur].classList.remove('active');
+      dotsWrap.children[cur].classList.remove('active');
+      cur = (idx + total) % total;
+      track.style.transform = `translateX(-${cur * 100}%)`;
+      slides[cur].classList.add('active');
+      dotsWrap.children[cur].classList.add('active');
+      if (counter) counter.textContent = `${cur + 1} / ${total}`;
     }
 
-    function startAuto() { autoTimer = setInterval(() => goTo(current + 1), 4500); }
-    function stopAuto()  { clearInterval(autoTimer); }
+    function start() { autoTimer = setInterval(() => goTo(cur + 1), 4800); }
+    function stop()  { clearInterval(autoTimer); }
 
-    // Iniciar primera slide
     slides[0].classList.add('active');
-
-    // Botones prev / next
-    btnPrev.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
-    btnNext.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
+    btnPrev.addEventListener('click', () => { stop(); goTo(cur - 1); start(); });
+    btnNext.addEventListener('click', () => { stop(); goTo(cur + 1); start(); });
 
     // Swipe táctil
-    let touchStartX = 0;
-    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend', e => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) { stopAuto(); goTo(diff > 0 ? current + 1 : current - 1); startAuto(); }
+    let tx = 0;
+    track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend',   e => {
+      const d = tx - e.changedTouches[0].clientX;
+      if (Math.abs(d) > 40) { stop(); goTo(d > 0 ? cur + 1 : cur - 1); start(); }
     });
 
-    // Pausa en hover
-    const wrapper = track.closest('.slider-wrapper');
+    // Pausa hover
+    const wrapper = track.closest('.slider-wrap');
     if (wrapper) {
-      wrapper.addEventListener('mouseenter', stopAuto);
-      wrapper.addEventListener('mouseleave', startAuto);
+      wrapper.addEventListener('mouseenter', stop);
+      wrapper.addEventListener('mouseleave', start);
     }
 
-    // Teclas ← →
+    // Teclado
     document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowLeft')  { stopAuto(); goTo(current - 1); startAuto(); }
-      if (e.key === 'ArrowRight') { stopAuto(); goTo(current + 1); startAuto(); }
+      if (e.key === 'ArrowLeft')  { stop(); goTo(cur - 1); start(); }
+      if (e.key === 'ArrowRight') { stop(); goTo(cur + 1); start(); }
     });
 
-    startAuto();
+    start();
   }
 
 });
