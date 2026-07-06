@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuestra Boda - Ernesto & Olivia</title>
+  <meta name="description" content="Invitación digital a la boda de Ernesto Goytia y Olivia Daza. Sábado 8 de agosto 2026 - Cochabamba, Bolivia." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Partículas flotantes -->
+  <div class="petals-container" id="petals"></div>
+
+  <!-- Botón de música -->
+  <button class="music-btn" id="musicBtn" title="Reproducir música">♪</button>
+
+  <!-- ===== SECCIÓN HERO ===== -->
+  <section class="hero" id="inicio">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-subtitle fade-in">Nuestra Boda</p>
+      <div class="monogram-wrap fade-in-delay1">
+        <img src="monogram.png" alt="Monograma E&O" class="monogram-img" />
+      </div>
+      <h1 class="hero-names fade-in-delay2">Ernesto <span class="ampersand">&</span> Olivia</h1>
+      <div class="hero-date fade-in-delay3">
+        <span class="date-line"></span>
+        <span class="date-text">08 · 08 · 2026</span>
+        <span class="date-line"></span>
+      </div>
+      <p class="hero-phrase fade-in-delay3">
+        "Después de años de risas, amor y mucha paciencia...<br/>
+        ¡por fin damos el gran paso!"
+      </p>
+      <a href="#detalles" class="scroll-btn fade-in-delay3">Ver Detalles ↓</a>
+    </div>
+    <div class="hero-flowers-bottom"></div>
+  </section>
+
+  <!-- ===== CUENTA REGRESIVA ===== -->
+  <section class="countdown-section">
+    <div class="section-deco">✦ ✦ ✦</div>
+    <h2 class="section-title">Faltan...</h2>
+    <div class="countdown" id="countdown">
+      <div class="count-box">
+        <span class="count-num" id="days">00</span>
+        <span class="count-label">Días</span>
+      </div>
+      <div class="count-sep">:</div>
+      <div class="count-box">
+        <span class="count-num" id="hours">00</span>
+        <span class="count-label">Horas</span>
+      </div>
+      <div class="count-sep">:</div>
+      <div class="count-box">
+        <span class="count-num" id="minutes">00</span>
+        <span class="count-label">Minutos</span>
+      </div>
+      <div class="count-sep">:</div>
+      <div class="count-box">
+        <span class="count-num" id="seconds">00</span>
+        <span class="count-label">Segundos</span>
+      </div>
+    </div>
+    <p class="countdown-sub">Para nuestra ceremonia religiosa</p>
+  </section>
+
+  <!-- ===== MENSAJE ===== -->
+  <section class="message-section" id="detalles">
+    <div class="floral-divider top"></div>
+    <div class="container">
+      <div class="section-deco">🌸 🤍 🌸</div>
+      <h2 class="section-title script">Nuestra Historia</h2>
+      <p class="message-text">
+        Tenemos la dicha de invitarles a continuar con nuestra historia juntos.<br/><br/>
+        Te invitamos a ser parte de nuestra Boda.<br/>
+        Ven y acompáñanos en esta eterna promesa.
+      </p>
+    </div>
+    <div class="floral-divider bottom"></div>
+  </section>
+
+  <!-- ===== FAMILIA ===== -->
+  <section class="family-section">
+    <div class="container">
+      <div class="section-deco">✦</div>
+      <h2 class="section-title">Con la Bendición de Nuestros Padres</h2>
+
+      <div class="families-grid">
+        <div class="family-card">
+          <div class="family-icon">💍</div>
+          <h3 class="family-role">Novio</h3>
+          <p class="family-name main-name">Ernesto Goytia</p>
+          <div class="parents-list">
+            <p class="parent-name">✝ Aurelio Goytia <span class="qepd">(QEPD)</span></p>
+            <p class="parent-name">✝ Maura Ríos <span class="qepd">(QEPD)</span></p>
+          </div>
+        </div>
+
+        <div class="family-heart">
+          <div class="heart-big">❤</div>
+        </div>
+
+        <div class="family-card">
+          <div class="family-icon">👰</div>
+          <h3 class="family-role">Novia</h3>
+          <p class="family-name main-name">Olivia Daza</p>
+          <div class="parents-list">
+            <p class="parent-name">✝ Marcial Daza <span class="qepd">(QEPD)</span></p>
+            <p class="parent-name">Albina Prado</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Padrinos -->
+      <div class="padrinos-section">
+        <h3 class="padrinos-title">Nuestros Padrinos</h3>
+        <div class="padrinos-grid">
+          <div class="padrino-card">
+            <div class="padrino-icon">⛪</div>
+            <h4>Padrinos de Religión</h4>
+            <p>Remy Daza</p>
+            <p>Karina Prado</p>
+          </div>
+          <div class="padrino-card">
+            <div class="padrino-icon">📜</div>
+            <h4>Padrinos de Civil</h4>
+            <p>Roger Jaldin</p>
+            <p>Consuelo Daza</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EVENTOS ===== -->
+  <section class="events-section" id="eventos">
+    <div class="floral-divider top"></div>
+    <div class="container">
+      <div class="section-deco">🌿 ✨ 🌿</div>
+      <h2 class="section-title">Nuestros Eventos</h2>
+
+      <div class="events-grid">
+
+        <!-- Evento 1: Ceremonia Religiosa -->
+        <div class="event-card reveal">
+          <div class="event-badge">DÍA 1</div>
+          <div class="event-icon">⛪</div>
+          <h3 class="event-type">Ceremonia Religiosa</h3>
+          <div class="event-date-box">
+            <p class="event-weekday">Sábado</p>
+            <p class="event-day-num">08</p>
+            <p class="event-month">Agosto · 2026</p>
+          </div>
+          <div class="event-info">
+            <div class="event-info-row">
+              <span class="info-icon">🕛</span>
+              <span>12:00 p.m.</span>
+            </div>
+            <div class="event-info-row">
+              <span class="info-icon">📍</span>
+              <span>Templo Santo Domingo<br/>Calle Ayacucho y Jordan<br/>Cochabamba</span>
+            </div>
+          </div>
+          <a href="https://maps.google.com/?q=Templo+Santo+Domingo+Ayacucho+Jordan+Cochabamba" target="_blank" class="map-btn">📍 Ver en Mapa</a>
+        </div>
+
+        <!-- Evento 2: Recepción -->
+        <div class="event-card reveal">
+          <div class="event-badge">DÍA 2</div>
+          <div class="event-icon">🥂</div>
+          <h3 class="event-type">Recepción & Fiesta</h3>
+          <div class="event-date-box">
+            <p class="event-weekday">Domingo</p>
+            <p class="event-day-num">09</p>
+            <p class="event-month">Agosto · 2026</p>
+          </div>
+          <div class="event-info">
+            <div class="event-info-row">
+              <span class="info-icon">🕒</span>
+              <span>15:00 p.m.</span>
+            </div>
+            <div class="event-info-row">
+              <span class="info-icon">📍</span>
+              <span>Local El Capitolio<br/>Punata</span>
+            </div>
+          </div>
+          <a href="https://maps.google.com/?q=El+Capitolio+Punata+Bolivia" target="_blank" class="map-btn">📍 Ver en Mapa</a>
+        </div>
+
+      </div>
+    </div>
+    <div class="floral-divider bottom"></div>
+  </section>
+
+  <!-- ===== CANCIÓN ===== -->
+  <section class="song-section">
+    <div class="container">
+      <div class="section-deco">🎵</div>
+      <h2 class="section-title script">Nuestra Canción</h2>
+      <div class="song-card">
+        <div class="vinyl-anim">
+          <div class="vinyl-outer">
+            <div class="vinyl-inner">♪</div>
+          </div>
+        </div>
+        <div class="song-info">
+          <p class="song-title">"Te Amaré"</p>
+          <p class="song-artist">Laura Pausini & Miguel Bosé</p>
+          <p class="song-quote">"Te amaré como nunca nadie pudo amar,<br/>te amaré para siempre, para siempre..."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DRESS CODE ===== -->
+  <section class="dresscode-section">
+    <div class="container">
+      <div class="section-deco">✦ ✦ ✦</div>
+      <h2 class="section-title">Código de Vestimenta</h2>
+      <div class="dresscode-grid">
+        <div class="dress-item reveal">
+          <div class="dress-icon">👔</div>
+          <p>Caballeros</p>
+          <span>Traje formal</span>
+        </div>
+        <div class="dress-item reveal">
+          <div class="dress-icon">👗</div>
+          <p>Damas</p>
+          <span>Vestido elegante</span>
+        </div>
+        <div class="dress-item reveal">
+          <div class="dress-icon">🚫</div>
+          <p>Evitar</p>
+          <span>No vestir de blanco</span>
+        </div>
+      </div>
+      <!-- Paleta de colores -->
+      <div class="color-palette">
+        <p class="palette-label">Paleta de Colores</p>
+        <div class="palette-swatches">
+          <div class="swatch" style="background:#f2c4ce;" title="Rosa suave"><span>Rosa</span></div>
+          <div class="swatch" style="background:#ffffff; border:1.5px solid #e8d5c8;" title="Blanco"><span style="color:#bbb;">Blanco</span></div>
+          <div class="swatch" style="background:#c9a84c;" title="Dorado"><span>Dorado</span></div>
+          <div class="swatch" style="background:#d4788a;" title="Rosa oscuro"><span>Rosa oscuro</span></div>
+          <div class="swatch" style="background:#e8c96d;" title="Champagne"><span>Champagne</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RSVP / CONFIRMACIÓN ===== -->
+  <section class="rsvp-section" id="rsvp">
+    <div class="floral-divider top"></div>
+    <div class="container">
+      <div class="section-deco">💌 💌 💌</div>
+      <h2 class="section-title script">Confirma tu Asistencia</h2>
+      <p class="rsvp-subtitle">Nos encantaría saber si podrás acompañarnos en este día tan especial.<br/>Por favor confirma antes del <strong>25 de Julio de 2026</strong>.</p>
+
+      <div class="rsvp-cards">
+        <!-- Card Ceremonia -->
+        <div class="rsvp-event-card reveal">
+          <div class="rsvp-event-icon">⛪</div>
+          <h3>Ceremonia Religiosa</h3>
+          <p>Sábado 08 · Agosto · 12:00 p.m.</p>
+          <p class="rsvp-place">Templo Santo Domingo</p>
+          <a href="https://wa.me/591TUNUMERO?text=Hola%21+Confirmo+mi+asistencia+a+la+ceremonia+religiosa+de+Ernesto+%26+Olivia+el+8+de+agosto.+Asistir%C3%A1n%3A+" target="_blank" class="rsvp-wa-btn">
+            <span class="wa-icon">📲</span> Confirmar por WhatsApp
+          </a>
+        </div>
+
+        <!-- Card Recepción -->
+        <div class="rsvp-event-card reveal">
+          <div class="rsvp-event-icon">🥂</div>
+          <h3>Recepción &amp; Fiesta</h3>
+          <p>Domingo 09 · Agosto · 15:00 p.m.</p>
+          <p class="rsvp-place">El Capitolio, Punata</p>
+          <a href="https://wa.me/591TUNUMERO?text=Hola%21+Confirmo+mi+asistencia+a+la+recepci%C3%B3n+de+Ernesto+%26+Olivia+el+9+de+agosto.+Asistir%C3%A1n%3A+" target="_blank" class="rsvp-wa-btn">
+            <span class="wa-icon">📲</span> Confirmar por WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="rsvp-note">
+        <p>📝 Por favor indica tu nombre y el número de personas que te acompañarán.</p>
+      </div>
+    </div>
+    <div class="floral-divider bottom"></div>
+  </section>
+
+  <!-- ===== CIERRE ===== -->
+  <section class="closing-section">
+    <div class="floral-divider top"></div>
+    <div class="container closing-container">
+      <img src="monogram.png" alt="Monograma" class="closing-monogram" />
+      <h2 class="closing-names">Ernesto <span class="ampersand">&</span> Olivia</h2>
+      <p class="closing-message">
+        ¡Estamos ansiosos de celebrar este momento único con ustedes!<br/>
+        Con mucho cariño 💕
+      </p>
+      <div class="closing-date">08 · 08 · 2026</div>
+      <a href="#rsvp" class="closing-rsvp-btn">💌 Confirmar Asistencia</a>
+      <div class="closing-hearts">❤ ❤ ❤</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Ernesto & Olivia · Agosto 2026 · Cochabamba, Bolivia 🇧🇴</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
