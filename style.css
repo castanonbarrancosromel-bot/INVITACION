@@ -206,11 +206,15 @@ a  { text-decoration: none; }
 .hero-pre {
   font-family: var(--font-body);
   font-weight: 300;
-  font-size: 0.75rem;
-  letter-spacing: 0.5em;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--gold-light);
   margin-bottom: 20px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
 }
 .hero-names {
   display: flex;
@@ -900,7 +904,7 @@ a  { text-decoration: none; }
   justify-content: center;
   gap: 22px;
   flex-wrap: wrap;
-  margin-bottom: 50px;
+  margin-bottom: 0;
 }
 .dress-card {
   background: var(--white);
@@ -1009,6 +1013,10 @@ a  { text-decoration: none; }
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   margin-bottom: 28px;
+}
+.rsvp-single {
+  grid-template-columns: minmax(280px, 480px);
+  justify-content: center;
 }
 .rsvp-card {
   background: rgba(255,255,255,0.04);
