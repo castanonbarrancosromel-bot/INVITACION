@@ -72,77 +72,90 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 
   // ============================================================
-  // 4. WEB AUDIO - Music Box Synthesizer
+  // 4. YOUTUBE MUSIC PLAYER  ·  "Te Amaré" - Laura Pausini & Miguel Bosé
+  //    Video: https://youtu.be/W7---s02QaQ
   // ============================================================
-  let audioCtx = null, playing = false, seqTimer = null, seqIdx = 0;
-  let masterGain = null, delayNode = null;
+  const YT_VIDEO_ID = 'W7---s02QaQ';
+  let ytPlayer   = null;
+  let ytReady    = false;
+  let ytPlaying  = false;
+  let ytPending  = false; // play was requested before player ready
 
-  const melody = [
-    [261.63,1],[329.63,1],[392.00,1],[523.25,2],[392.00,1],[329.63,1],
-    [246.94,1],[293.66,1],[392.00,1],[493.88,2],[392.00,1],[293.66,1],
-    [220.00,1],[261.63,1],[329.63,1],[440.00,2],[329.63,1],[261.63,1],
-    [174.61,1],[220.00,1],[261.63,1],[349.23,2],[261.63,1],[220.00,1],
-    [523.25,1],[587.33,1],[659.25,2],[523.25,1],[587.33,1],[659.25,2],
-    [493.88,1],[523.25,1],[587.33,2],[493.88,1],[523.25,1],[587.33,2],
-    [349.23,1],[392.00,1],[440.00,2],[523.25,1],[440.00,1],[392.00,1],
-    [392.00,2],[440.00,1],[493.88,1],[587.33,2],[392.00,1],[493.88,1]
-  ];
+  // Create hidden container for the YT iframe (must be in DOM for API)
+  const ytContainer = document.createElement('div');
+  ytContainer.id = 'yt-player-container';
+  ytContainer.style.cssText =
+    'position:fixed;width:1px;height:1px;bottom:0;left:0;opacity:0;pointer-events:none;z-index:-1;';
+  document.body.appendChild(ytContainer);
 
-  function initAudio() {
-    if (audioCtx) return;
-    const AC = window.AudioContext || window.webkitAudioContext;
-    audioCtx  = new AC();
-    masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.14;
-    masterGain.connect(audioCtx.destination);
-    delayNode = audioCtx.createDelay(1.0);
-    delayNode.delayTime.value = 0.36;
-    const fb = audioCtx.createGain(); fb.gain.value = 0.26;
-    delayNode.connect(fb); fb.connect(delayNode); delayNode.connect(masterGain);
+  // Inject YouTube IFrame API script dynamically
+  function loadYTScript() {
+    if (document.getElementById('yt-api-script')) return;
+    const s = document.createElement('script');
+    s.id  = 'yt-api-script';
+    s.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(s);
   }
 
-  function playNote(freq, dur) {
-    if (!audioCtx) return;
-    const f   = freq * 2;
-    const osc1 = audioCtx.createOscillator();
-    osc1.type = 'triangle'; osc1.frequency.value = f;
-    const osc2 = audioCtx.createOscillator();
-    osc2.type = 'sine'; osc2.frequency.value = f * 2; osc2.detune.value = 7;
-    const g1 = audioCtx.createGain();
-    g1.gain.setValueAtTime(0, audioCtx.currentTime);
-    g1.gain.linearRampToValueAtTime(0.28, audioCtx.currentTime + 0.018);
-    g1.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur * 1.8);
-    const g2 = audioCtx.createGain();
-    g2.gain.setValueAtTime(0, audioCtx.currentTime);
-    g2.gain.linearRampToValueAtTime(0.14, audioCtx.currentTime + 0.012);
-    g2.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur * 0.85);
-    osc1.connect(g1); g1.connect(masterGain); g1.connect(delayNode);
-    osc2.connect(g2); g2.connect(masterGain); g2.connect(delayNode);
-    osc1.start(); osc1.stop(audioCtx.currentTime + dur * 2.5);
-    osc2.start(); osc2.stop(audioCtx.currentTime + dur * 2.5);
-  }
-
-  function playStep() {
-    const [freq, mult] = melody[seqIdx];
-    const B = 0.31;
-    playNote(freq, B * mult);
-    seqIdx = (seqIdx + 1) % melody.length;
-    seqTimer = setTimeout(playStep, B * 1000);
-  }
+  // Called automatically by YouTube API when ready
+  window.onYouTubeIframeAPIReady = function () {
+    ytPlayer = new YT.Player('yt-player-container', {
+      videoId: YT_VIDEO_ID,
+      playerVars: {
+        autoplay: 0,
+        controls: 0,
+        disablekb: 1,
+        fs: 0,
+        iv_load_policy: 3,
+        modestbranding: 1,
+        rel: 0,
+        loop: 1,
+        playlist: YT_VIDEO_ID   // needed for loop
+      },
+      events: {
+        onReady: function (e) {
+          ytReady = true;
+          e.target.setVolume(80);
+          if (ytPending) { e.target.playVideo(); ytPending = false; }
+        },
+        onStateChange: function (e) {
+          const btn = document.getElementById('musicBtn');
+          if (e.data === YT.PlayerState.PLAYING) {
+            ytPlaying = true;
+            btn.classList.add('playing');
+            btn.textContent = '⏸';
+            btn.title = 'Pausar';
+          } else if (
+            e.data === YT.PlayerState.PAUSED ||
+            e.data === YT.PlayerState.ENDED
+          ) {
+            ytPlaying = false;
+            btn.classList.remove('playing');
+            btn.textContent = '♪';
+            btn.title = 'Reproducir música';
+          }
+        }
+      }
+    });
+  };
 
   function toggleMusic() {
-    initAudio();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
     const btn = document.getElementById('musicBtn');
-    playing = !playing;
-    if (playing) {
-      seqIdx = 0; playStep();
-      btn.classList.add('playing'); btn.textContent = '⏸'; btn.title = 'Pausar';
+    if (!ytReady) {
+      // API not loaded yet → load it and mark pending
+      loadYTScript();
+      ytPending = true;
+      btn.textContent = '…';
+      btn.title = 'Cargando…';
+      return;
+    }
+    if (ytPlaying) {
+      ytPlayer.pauseVideo();
     } else {
-      clearTimeout(seqTimer);
-      btn.classList.remove('playing'); btn.textContent = '♪'; btn.title = 'Reproducir música';
+      ytPlayer.playVideo();
     }
   }
+
   document.getElementById('musicBtn').addEventListener('click', toggleMusic);
 
   // ============================================================

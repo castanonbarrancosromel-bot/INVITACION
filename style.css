@@ -431,6 +431,33 @@ a  { text-decoration: none; }
   z-index: 10;
 }
 
+/* ---- Per-photo positioning (object-position customised per slide) ---- */
+/* Portrait / vertical photos – show faces from top */
+.slide-f1  img { object-position: center 25%; }
+.slide-f5  img { object-position: center 20%; }
+.slide-f7  img { object-position: center 20%; }
+.slide-f8  img { object-position: center 20%; }
+.slide-f9  img { object-position: center 25%; }
+.slide-f13 img { object-position: center 15%; }
+
+/* Square / wide portrait – center keeps faces visible */
+.slide-f14 img { object-position: center 30%; }
+.slide-f11 img { object-position: center 35%; }
+.slide-f6  img { object-position: center 30%; }
+.slide-f12 img { object-position: center 35%; }
+.slide-f3  img { object-position: center 40%; }
+
+/* Collage fotos (landscape with multiple inset photos) –
+   use contain so the entire image is shown, no cropping */
+.slide-f2  img,
+.slide-f4  img,
+.slide-f10 img,
+.slide-f15 img {
+  object-fit: contain;
+  object-position: center center;
+  background: #111;
+}
+
 /* ============================================================
    COUNTDOWN
 ============================================================ */
