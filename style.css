@@ -431,32 +431,52 @@ a  { text-decoration: none; }
   z-index: 10;
 }
 
-/* ---- Per-photo positioning (object-position customised per slide) ---- */
-/* Portrait / vertical photos – show faces from top */
-.slide-f1  img { object-position: center 25%; }
-.slide-f5  img { object-position: center 20%; }
-.slide-f7  img { object-position: center 20%; }
-.slide-f8  img { object-position: center 20%; }
-.slide-f9  img { object-position: center 25%; }
-.slide-f13 img { object-position: center 15%; }
+/* ---- Per-photo positioning ---- */
 
-/* Square / wide portrait – center keeps faces visible */
-.slide-f14 img { object-position: center 30%; }
-.slide-f11 img { object-position: center 35%; }
-.slide-f6  img { object-position: center 30%; }
-.slide-f12 img { object-position: center 35%; }
-.slide-f3  img { object-position: center 40%; }
+/* slide 1 · foto14 – cuadrada, caras centro-alto */
+.slide-f14 img { object-position: center 28%; }
 
-/* Collage fotos (landscape with multiple inset photos) –
-   use contain so the entire image is shown, no cropping */
-.slide-f2  img,
-.slide-f4  img,
-.slide-f10 img,
-.slide-f15 img {
-  object-fit: contain;
-  object-position: center center;
-  background: #111;
-}
+/* slide 2 · foto11 – horizontal, caras centro */
+.slide-f11 img { object-position: center 38%; }
+
+/* slide 3 · foto1 – vertical portrait, caras arriba */
+.slide-f1  img { object-position: center 18%; }
+
+/* slide 4 · foto6 – horizontal noche, caras centro */
+.slide-f6  img { object-position: 42% 38%; }
+
+/* slide 5 · foto13 – vertical iglesia, caras arriba-centro */
+.slide-f13 img { object-position: center 12%; }
+
+/* slide 6 · foto2 – collage vertical 3 fotos, mostrar foto top */
+.slide-f2  img { object-position: center 8%; }
+
+/* slide 7 · foto7 – vertical portrait, caras arriba */
+.slide-f7  img { object-position: center 12%; }
+
+/* slide 8 · foto12 – horizontal restaurante, caras izquierda-centro */
+.slide-f12 img { object-position: 38% 42%; }
+
+/* slide 9 · foto3 – casi cuadrada lago, caras centro-alto */
+.slide-f3  img { object-position: center 22%; }
+
+/* slide 10 · foto8 – vertical escaleras, caras bien arriba */
+.slide-f8  img { object-position: center 10%; }
+
+/* slide 11 · foto9 – vertical atardecer campo, caras centro-superior */
+.slide-f9  img { object-position: center 18%; }
+
+/* slide 12 · foto15 – collage 5 fotos, mostrar foto grande izquierda (cara en ~15% X) */
+.slide-f15 img { object-position: 12% center; }
+
+/* slide 13 · foto4 – collage 4 fotos, mostrar panel grande izquierdo */
+.slide-f4  img { object-position: 18% 38%; }
+
+/* slide 14 · foto10 – mitad foto + mitad collage, centro-izquierda */
+.slide-f10 img { object-position: 28% 40%; }
+
+/* slide 15 · foto5 – vertical banca, caras en tercio superior */
+.slide-f5  img { object-position: center 15%; }
 
 /* ============================================================
    COUNTDOWN
