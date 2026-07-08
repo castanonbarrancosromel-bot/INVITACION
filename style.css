@@ -454,8 +454,6 @@ a  { text-decoration: none; }
 /* slide 7 · foto7 – vertical portrait, caras arriba */
 .slide-f7  img { object-position: center 12%; }
 
-/* slide 8 · foto12 – horizontal restaurante, caras izquierda-centro */
-.slide-f12 img { object-position: 38% 42%; }
 
 /* slide 9 · foto3 – casi cuadrada lago, caras centro-alto */
 .slide-f3  img { object-position: center 22%; }
