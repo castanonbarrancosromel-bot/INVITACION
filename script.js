@@ -72,90 +72,124 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 
   // ============================================================
-  // 4. YOUTUBE MUSIC PLAYER  ·  "Te Amaré" - Laura Pausini & Miguel Bosé
-  //    Video: https://youtu.be/W7---s02QaQ
+  // 4. YOUTUBE MUSIC — autoplay de fondo al cargar la página
+  //    "Te Amaré" · Laura Pausini & Miguel Bosé
+  //    https://youtu.be/W7---s02QaQ
   // ============================================================
   const YT_VIDEO_ID = 'W7---s02QaQ';
-  let ytPlayer   = null;
-  let ytReady    = false;
-  let ytPlaying  = false;
-  let ytPending  = false; // play was requested before player ready
+  let ytPlayer  = null;
+  let ytReady   = false;
+  let ytPlaying = false;
 
-  // Create hidden container for the YT iframe (must be in DOM for API)
-  const ytContainer = document.createElement('div');
-  ytContainer.id = 'yt-player-container';
-  ytContainer.style.cssText =
+  // Contenedor invisible para el iframe de YT
+  const ytWrap = document.createElement('div');
+  ytWrap.id = 'yt-player-container';
+  ytWrap.style.cssText =
     'position:fixed;width:1px;height:1px;bottom:0;left:0;opacity:0;pointer-events:none;z-index:-1;';
-  document.body.appendChild(ytContainer);
+  document.body.appendChild(ytWrap);
 
-  // Inject YouTube IFrame API script dynamically
-  function loadYTScript() {
-    if (document.getElementById('yt-api-script')) return;
-    const s = document.createElement('script');
-    s.id  = 'yt-api-script';
-    s.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(s);
+  // Toast "toca para activar sonido" (por si el browser bloquea autoplay)
+  const toast = document.createElement('div');
+  toast.id = 'music-toast';
+  toast.innerHTML = '🎵 Toca en cualquier lugar para activar la música';
+  toast.style.cssText = `
+    position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:rgba(201,168,76,0.92);color:#111;padding:10px 22px;border-radius:50px;
+    font-family:'Montserrat',sans-serif;font-size:0.72rem;letter-spacing:0.15em;
+    opacity:0;transition:opacity 0.5s,transform 0.5s;pointer-events:none;z-index:9999;
+    white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.3);`;
+  document.body.appendChild(toast);
+
+  function showToast() {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(20px)';
+    }, 4000);
   }
 
-  // Called automatically by YouTube API when ready
+  function updateBtn(playing) {
+    const btn = document.getElementById('musicBtn');
+    ytPlaying = playing;
+    if (playing) {
+      btn.classList.add('playing'); btn.textContent = '⏸'; btn.title = 'Pausar música';
+    } else {
+      btn.classList.remove('playing'); btn.textContent = '♪'; btn.title = 'Reproducir música';
+    }
+  }
+
+  // Llamado automáticamente por la API de YouTube
   window.onYouTubeIframeAPIReady = function () {
     ytPlayer = new YT.Player('yt-player-container', {
       videoId: YT_VIDEO_ID,
       playerVars: {
-        autoplay: 0,
-        controls: 0,
-        disablekb: 1,
-        fs: 0,
-        iv_load_policy: 3,
-        modestbranding: 1,
-        rel: 0,
-        loop: 1,
-        playlist: YT_VIDEO_ID   // needed for loop
+        autoplay:        1,          // intentar autoplay
+        mute:            1,          // empieza muted (navegadores lo permiten)
+        controls:        0,
+        disablekb:       1,
+        fs:              0,
+        iv_load_policy:  3,
+        modestbranding:  1,
+        rel:             0,
+        loop:            1,
+        playlist:        YT_VIDEO_ID // necesario para loop
       },
       events: {
         onReady: function (e) {
           ytReady = true;
-          e.target.setVolume(80);
-          if (ytPending) { e.target.playVideo(); ytPending = false; }
+          e.target.setVolume(75);
+          // Intentar quitar mute inmediatamente
+          try {
+            e.target.unMute();
+            e.target.playVideo();
+          } catch (_) {}
         },
         onStateChange: function (e) {
-          const btn = document.getElementById('musicBtn');
           if (e.data === YT.PlayerState.PLAYING) {
-            ytPlaying = true;
-            btn.classList.add('playing');
-            btn.textContent = '⏸';
-            btn.title = 'Pausar';
+            // Verificar si aún está muted (browser bloqueó audio)
+            if (ytPlayer.isMuted()) {
+              // Esperar primer toque del usuario para activar
+              showToast();
+              const unlock = () => {
+                ytPlayer.unMute();
+                ytPlayer.setVolume(75);
+                document.removeEventListener('click', unlock);
+                document.removeEventListener('touchstart', unlock);
+                toast.style.opacity = '0';
+              };
+              document.addEventListener('click', unlock, { once: true });
+              document.addEventListener('touchstart', unlock, { once: true });
+            }
+            updateBtn(true);
           } else if (
             e.data === YT.PlayerState.PAUSED ||
             e.data === YT.PlayerState.ENDED
           ) {
-            ytPlaying = false;
-            btn.classList.remove('playing');
-            btn.textContent = '♪';
-            btn.title = 'Reproducir música';
+            updateBtn(false);
           }
         }
       }
     });
   };
 
+  // Cargar la API de YouTube inmediatamente al abrir la página
+  (function loadYTScript() {
+    const s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(s);
+  })();
+
+  // Botón ♪ — pausa / reanuda
   function toggleMusic() {
-    const btn = document.getElementById('musicBtn');
-    if (!ytReady) {
-      // API not loaded yet → load it and mark pending
-      loadYTScript();
-      ytPending = true;
-      btn.textContent = '…';
-      btn.title = 'Cargando…';
-      return;
-    }
+    if (!ytReady) return;
     if (ytPlaying) {
       ytPlayer.pauseVideo();
     } else {
+      if (ytPlayer.isMuted()) ytPlayer.unMute();
       ytPlayer.playVideo();
     }
   }
-
   document.getElementById('musicBtn').addEventListener('click', toggleMusic);
 
   // ============================================================
